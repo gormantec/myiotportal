@@ -1,12 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { Amplify } from "aws-amplify";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react-native";
+import { Button } from 'react-native';
+import outputs from '../myiotportal/amplify'
+
+
+Amplify.configure(outputs);
+
+function SignOutButton() {
+  const { user, signOut } = useAuthenticator((context) => [context.user]);
+  console.log("User:", user);
+  return <Button title="Sign Out" onPress={signOut} />;
+}
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Authenticator.Provider>
+      <Authenticator>
+        <SignOutButton />
+      </Authenticator>
+    </Authenticator.Provider>
   );
 }
 
